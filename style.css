@@ -1,0 +1,196 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.scheduleRadio {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    min-width: 80%;
+    margin: 0 1rem;
+}
+
+.radioDiv input[type="radio"] {
+    position: fixed;
+    opacity: 0;
+    width: 0;
+    }
+
+.radioDiv label {
+    display: inline-block;
+    background-color: #899499;
+    padding: 5px 10px;
+    border: 2px solid coral;
+    font-size: 12pt;
+    border-radius: 4px;
+}
+
+.radioDiv input[type="radio"]:checked + label {
+    background-color: coral;
+    border-color: gold;
+}
+
+.scheduleDiv {
+    display: flex;
+    flex-direction: column-reverse;
+    min-width: 95%;
+}
+
+.schedulePrev, .scheduleToday, .scheduleFut {
+    display: flex;
+    border: 2px solid aquamarine;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 10px;
+    padding: 1rem;
+}
+
+.scheduleFut, .scheduleToday{
+    .matchDate {
+        min-width: 30%;
+    }
+
+    .logo, .name {
+        min-width: 15%;
+    }
+    .score {
+        min-width: 5%;
+    }
+}
+.scheduleFut {
+    display: none;
+}
+
+.logo img{
+    height: 3em;
+    width: auto;
+}
+.schedulePrev {
+    .matchDate{
+        min-width: 20%;
+    }
+    .vodList {
+        min-width: 30%;
+    }
+    .logo, .name {
+        min-width: 10%
+    }
+    .score {
+        min-width: 5%;
+    }
+}
+
+.vodList {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.vodText {
+    width: 100;
+    background-color: #899499;
+    padding: 5px;
+    border-radius: 3px;
+    min-width: 7rem;
+    text-align: center;
+}
+
+.vodText:hover {
+    background-color: coral;
+    box-shadow: 4px 4px 2px rgba(255, 255, 255, 0.3);
+}
+
+.vodHidden {
+    font-size: 11pt;
+    display: flex;
+    justify-content: space-evenly;
+
+}
+
+.vodLink:hover {
+    background-color: #899499;
+    border: 1px solid aquamarine;
+    box-shadow: 4px 4px 2px rgba(255, 255, 255, 0.3);
+
+}
+
+.vodLink{
+    border: 1px solid gold;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.vodList select {
+    width: 100%;
+    text-align: center;
+}
+
+/* The Overlay (background) */
+.video-modal-overlay {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Black w/ opacity */
+    backdrop-filter: blur(5px); /* Optional: blurs background */
+    justify-content: center;
+    align-items: center;
+}
+
+/* The Modal Content Box */
+.video-modal-content {
+    position: relative;
+    width: 80%;
+    max-width: 900px;
+    background: #000;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    animation: fadeIn 0.3s ease;
+}
+
+/* The Close Button */
+.video-close-btn {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    color: white;
+    font-size: 35px;
+    font-weight: bold;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.video-close-btn:hover {
+    color: #ff4444;
+}
+
+/* Responsive Iframe Wrapper (16:9 Aspect Ratio) */
+.video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 ratio */
+    height: 0;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
