@@ -1,31 +1,113 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CDM-Revanced</title>
-    <link rel="stylesheet" href="style.css">
-</head>
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-<body>
+  <body>
     <main>
-        <div id="videoModal" class="video-modal-overlay">
-            <div class="video-modal-content">
-                <button class="video-close-btn" onclick="closeVideoModal()">&times;</button>
-                <div class="video-wrapper">
-                    <iframe id="videoFrame" src="" frameborder="0" allow="autoplay; encrypted-media"
-                        allowfullscreen></iframe>
+      <div id="videoModal" class="video-modal-overlay">
+        <div class="video-modal-content">
+          <button class="video-close-btn" onclick="closeVideoModal()">
+            &times;
+          </button>
+          <div class="video-wrapper">
+            <iframe
+              id="videoFrame"
+              src=""
+              frameborder="0"
+              allow="autoplay; encrypted-media"
+              allowfullscreen
+            ></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="formContainer">
+          <form id="searchForm" onsubmit="handleForm()">
+            <div id="normalArea">
+              <div id="selectBoxes">
+                <div id="formElements">
+                  <label for="dataType">Data Type</label>
+                  <select name="datatype" id="dataType">
+                    <option value="schedule">Schedule</option>
+                    <option value="searchPlayer">Player</option>
+                    <option value="napData">Map Data</option>
+                    <option value="temData">Team Data</option>
+                  </select>
                 </div>
-            </div>
-        </div>
-        <div class="container">
-            <div class="scheduleRadio"></div>
-            <div class="scheduleDiv"></div>
+                <div id="formElements">
+                  <label for="season">Season</label>
+                  <select name="season" id="season">
+                    <option value="CODML2025S2">current</option>
+                    <option value="CODML2025S1">2025 S1</option>
+                    <option value="CODML2024S2">2024 S2</option>
+                    <option value="CODML2024S1">2024 S1</option>
+                  </select>
+                </div>
+              </div>
+              <fieldset>
+                <legend>Which Game Mode?</legend>
+                <div id="radioBoxes">
+                  <div>
+                    <input
+                      type="radio"
+                      id="fullRadio"
+                      name="gameModes"
+                      value="FULL"
+                      checked
+                    />
+                    <label for="fullRadio">Full</label>
+                  </div>
 
+                  <div>
+                    <input
+                      type="radio"
+                      id="hpRadio"
+                      name="gameModes"
+                      value="Hotspot"
+                    />
+                    <label for="hpRadio">Hardpoint</label>
+                  </div>
+
+                  <div>
+                    <input
+                      type="radio"
+                      id="sndRadio"
+                      name="gameModes"
+                      value="Blast"
+                    />
+                    <label for="sndRadio">S&D</label>
+                  </div>
+                  <div>
+                    <input
+                      type="radio"
+                      id="ctlRadio"
+                      name="gameModes"
+                      value="Control"
+                    />
+                    <label for="ctlRadio">Control</label>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+            <div id="searchArea">
+              <!-- <input type="text" id="_playerInput" list="_playerList" placeholder="Search Player..." />
+
+<input type="hidden" id="_playerId" /> -->
+            </div>
+            <div id="submitDiv">
+              <input type="submit" id="submitBtn" />
+            </div>
+          </form>
         </div>
+        <div class="scheduleRadio"></div>
+        <div class="scheduleDiv"></div>
+      </div>
     </main>
     <script src="main.js"></script>
-</body>
-
+  </body>
 </html>

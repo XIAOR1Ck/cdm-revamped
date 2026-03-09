@@ -2,6 +2,24 @@ const container = document.getElementsByClassName('container')[0];
 const schDiv = document.getElementsByClassName('scheduleDiv')[0];
 const currentSeason = 'CODML2026S1';
 const scheduleRadio = document.getElementsByClassName('scheduleRadio')[0];
+const searchForm = document.getElementById('searchForm');
+const searchArea = document.getElementById('searchArea');
+const season = document.getElementById('season');
+const dataType = document.getElementById('dataType');
+
+dataType.addEventListener('change', function(){
+    const seasonid = season.value;
+    if (dataType.value === "searchPlayer") {
+        searchArea.style.display = 'block';
+        renderSearch(seasonid)
+    } else {
+    searchArea.style.display = 'none';
+}
+});
+
+season.addEventListener('change', function (){
+    renderSearch(season.value);
+})
 
 async function renderFront(seasonid) {
     const radioOptions = [
@@ -274,6 +292,44 @@ window.onclick = function (event) {
     }
 }
 
+// Render Form Search Bar for Player Search
+function renderSearch(seasonid){
+    searchArea.innerHTML = ' ';
+    fetch(`data/players_${seasonid}.json`)
+    .then(response => {
+            if (!response.ok){
+                throw new Error('Failed fetching Players list:', response.statusText);
+            }
+            return response.json();
+        })
+    .then(data => {
+            const dataOptions = data.map((values) => `<option value="${values.player_name}" data-id="${values.player_id}"></option>`).join('');
+            //const searchArea = document.getElementById("_searchArea");
+            searchArea.innerHTML = `
+            <input type="text" id="playerInput" list="playerList" placeholder="Search Player...">
+            <datalist id="playerList">
+                ${dataOptions}
+            </datalist>
+            <input type="hidden" id="playerId">
+`;
+            attachDatalistMapping('playerInput','playerId')
+        })
+    .catch (error => console.error (error));
+}
+
+// Generate Combolist for player Search
+function attachDatalistMapping(inputId, hiddenId) {
+  const input = document.getElementById(inputId);
+  const hidden = document.getElementById(hiddenId);
+  const datalist = document.getElementById(input.getAttribute('list'));
+
+  input.addEventListener('input', function () {
+    const match = Array.from(datalist.options)
+      .find(option => option.value === input.value);
+
+    hidden.value = match ? match.dataset.id : '';
+  });
+}
 
 
-renderFront(currentSeason);
+//renderFront(currentSeason);
