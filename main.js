@@ -12,6 +12,7 @@ const gameMode = document.querySelector('input[name="gameModes"]:checked');
 // Handle form Submit event
 
 searchForm.addEventListener('submit', async function (e){
+const gameMode = document.querySelector('input[name="gameModes"]:checked');
     e.preventDefault();
     switch (dataType.value) {
         case 'schedule':
@@ -25,6 +26,9 @@ searchForm.addEventListener('submit', async function (e){
         break;
 
         case 'searchPlayer':
+            const playerId = document.getElementById('playerId').value;
+            await getPlayerData(playerId, season.value, gameMode.value);
+
         break;
 
         case 'teamData':
@@ -420,8 +424,11 @@ async function getPlayerData(playerid, seasonid, gamemode) {
             break;
         }
     }
+    console.log(player);
     let playerRank = rank.indexOf(player);
-    createPlayerCard(data, gamemode, playerRank);
+    createPlayerCard(player, gamemode, playerRank);
+
+    
 
 }
 
@@ -441,7 +448,8 @@ function createPlayerCard(data, gamemode, rank) {
           </div>
           <div class="playerDetails">
             <div class="playerMain">
-              <div id="rating">Rating: ${data.rating}</div>
+              <div id="rating">Rating: ${Number(data.rating.toFixed(2)
+              )}</div>
               <div id="rank">Rank: ${rank}</div>
               <div id="mvp">MPV: ${data.mvp}</div>
               <div id="teamInfo">
@@ -460,62 +468,65 @@ function createPlayerCard(data, gamemode, rank) {
     let statsDiv = cardDiv.querySelector('.playerStats');
     switch (gamemode){
         case "Hotspot":
+            const min = Math.floor(data.hp_time / 60);
+            const sec = Math.floor(data.hp_time % 60);
             statsDiv.innerHTML = `
-              <div class="statField">STAT</div>
-              <div class="statField">STAT</div>
-              <div class="statField">STAT</div>
-              <div class="statField">STAT</div>
-              <div class="statField">STAT</div>
-              <div class="statField">STAT</div>
-              <div class="statField">STAT</div>
-              <div class="statField">STAT</div>
+              <div class="statField">Avg Kills: ${Number(data.k.toFixed(2))}</div>
+              <div class="statField">Avg Deaths: ${Number(data.d.toFixed(2))}</div>
+              <div class="statField">KD: ${data.kd}</div>
+              <div class="statField">Max Kills: ${data.max_k}</div>
+              <div class="statField">5 Kill Spree: ${data.times5accu_kill}</div>
+              <div class="statField">Avg Operator Kills: ${Number(data.times_ult_kill.toFixed(2))}</div>
+              <div class="statField">Max Hill Time: ${min}'${sec}"</div>
+              <div class="statField">Games Played: ${data.rounds}</div>
 `;
         break;
         case "Control":
+            const mins = Math.floor(data.hp_time / 60);
+            const secs = Math.floor(data.hp_time % 60);
             statsDiv.innerHTML = `
-              <div class="statField">STAT</div>
-              <div class="statField">STAT</div>
-              <div class="statField">STAT</div>
-              <div class="statField">STAT</div>
-              <div class="statField">STAT</div>
-              <div class="statField">STAT</div>
-              <div class="statField">STAT</div>
-              <div class="statField">STAT</div>
+              <div class="statField">Avg Kills: ${Number(data.k.toFixed())}</div>
+              <div class="statField">Avg Death: ${Number(data.d.toFixed(2))}</div>
+              <div class="statField">Avg Assists: ${Number(data.a.toFixed(2))}</div>
+              <div class="statField">KD: ${data.kd}</div>
+              <div class="statField">Max Kills: ${data.max_k}</div>
+              <div class="statField">5 Kill Spree: ${data.times5accu_kill}</div>
+              <div class="statField">Avg Operator Kills: ${Number(data.times_ult_kill.toFixed(2))}</div>
+              <div class="statField">Max Hill Time: ${mins}'${secs}"</div>
 `;
 
         break;
         case "Blast":
             statsDiv.innerHTML = `
-              <div class="statField">STAT</div>
-              <div class="statField">STAT</div>
-              <div class="statField">STAT</div>
-              <div class="statField">STAT</div>
-              <div class="statField">STAT</div>
-              <div class="statField">STAT</div>
-              <div class="statField">STAT</div>
-              <div class="statField">STAT</div>
+              <div class="statField">First Bloods: ${data.first_blood}</div>
+              <div class="statField">First Blood Rate: ${Number((data.first_blood_rate * 100).toFixed(2))}%</div>
+              <div class="statField">SR KillsPerRound: ${data.sniper_kill_per_round}</div>
+              <div class="statField">Max Kills: ${data.max_k}</div>
+              <div class="statField">Avg Deaths: ${Number(data.d.toFixed(2))}</div>
+              <div class="statField">SR KillRate: ${Number(data.times_sniper_kill.toFixed(2))}</div>
+              <div class="statField">Ace: ${data.times5accu_kill}</div>
+              <div class="statField">KD: ${data.kd}</div>
 `;
 
         break;
         case "FULL":
             statsDiv.innerHTML = `
-              <div class="statField">STAT</div>
-              <div class="statField">STAT</div>
-              <div class="statField">STAT</div>
-              <div class="statField">STAT</div>
-              <div class="statField">STAT</div>
-              <div class="statField">STAT</div>
-              <div class="statField">STAT</div>
-              <div class="statField">STAT</div>
+              <div class="statField">Kills: ${data.k}</div>
+              <div class="statField">Deaths: ${data.d}</div>
+              <div class="statField">Assists: ${data.a}</div>
+              <div class="statField">KD: ${data.kd}</div>
+              <div class="statField">Max Kills: ${data.max_k}</div>
+              <div class="statField">5 Kill Sprees: ${data.times5accu_kill}</div>
 `;
 
         break;
     }
-
+container.innerHTML = '';
+container.appendChild(cardDiv);
 
 }
 
-//getPlayerData('908709411', 'CODML2025S1', 'FULL');
-//renderFront(currentSeason);
+//getPlayerData('329450884', 'CODML2025S2', 'Control');
+renderFront(currentSeason);
 //
 //getSchedule('CODML2025S2');
