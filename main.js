@@ -1,24 +1,55 @@
 const container = document.getElementsByClassName('container')[0];
-const schDiv = document.getElementsByClassName('scheduleDiv')[0];
+const formContainer = document.querySelector('.formContainer');
 const currentSeason = 'CODML2026S1';
 const scheduleRadio = document.getElementsByClassName('scheduleRadio')[0];
 const searchForm = document.getElementById('searchForm');
 const searchArea = document.getElementById('searchArea');
 const season = document.getElementById('season');
 const dataType = document.getElementById('dataType');
+const gameMode = document.querySelector('input[name="gameModes"]:checked');
+
+
+// Handle form Submit event
+
+searchForm.addEventListener('submit', async function (e){
+    e.preventDefault();
+    switch (dataType.value) {
+        case 'schedule':
+            if(season.value === 'CODML2026S1') {
+                window.location.href = "./";
+            } else {
+                container.innerHTML = `<div class="schedleRadio"></div> <div class="scheduleDiv"></div>`;
+                await getSchedule(season.value);
+            //    const schedulePrev = document.querySelectorAll('.schedulePrev');
+            }
+        break;
+
+        case 'searchPlayer':
+        break;
+
+        case 'teamData':
+        break
+
+        case 'mapData':
+        break;
+
+    }
+});
 
 dataType.addEventListener('change', function(){
     const seasonid = season.value;
     if (dataType.value === "searchPlayer") {
         searchArea.style.display = 'block';
-        renderSearch(seasonid)
+        renderSearch(seasonid);
     } else {
     searchArea.style.display = 'none';
 }
 });
 
 season.addEventListener('change', function (){
-    renderSearch(season.value);
+    if(dataType.value === "searchPlayer"){
+        renderSearch(season.value);
+    }
 })
 
 async function renderFront(seasonid) {
@@ -86,7 +117,8 @@ async function renderFront(seasonid) {
                             });
                         };
                         break;
-                    case "Upcoming": if (scheduleToday) {
+                    case "Upcoming": 
+                        if (scheduleToday) {
                         scheduleToday.forEach(option => {
                             option.style.display = 'none';
                         });
@@ -123,6 +155,15 @@ async function renderFront(seasonid) {
 
 }
 
+//toggle Search Form
+function showForm() {
+    if (formContainer.style.display === 'none' || formContainer.style.display === '') {
+        formContainer.style.display = 'block'; // Show the element
+    } else {
+        formContainer.style.display = 'none'; // Hide the element
+    }
+}
+
 function toggleVod(element) {
     const parent = element.parentNode;
     const hiddenDiv = parent.querySelector('.vodHidden');
@@ -146,22 +187,24 @@ async function getSchedule(seasonid) {
             matchDate.setHours(0, 0, 0, 0);
             if (matchDate.getTime() < today.getTime()) {
                 dateStatus = "past";
-                createCard(Object.entries({ match_date, glogo, gname, guest_logo, guest_score, host_score, hname, hlogo, vid_list }), dateStatus);
+                createScheduleCard(Object.entries({ match_date, glogo, gname, guest_logo, guest_score, host_score, hname, hlogo, vid_list }), dateStatus);
             } else if (matchDate.getTime() === today.getTime()) {
                 dateStatus = "today";
-                createCard(Object.entries({ match_date, glogo, gname, guest_logo, guest_score, host_score, hname, hlogo }), dateStatus);
+                createScheduleCard(Object.entries({ match_date, glogo, gname, guest_logo, guest_score, host_score, hname, hlogo }), dateStatus);
 
             } else {
                 dateStatus = "future";
-                createCard(Object.entries({ match_date, glogo, gname, guest_logo, guest_score, host_score, hname, hlogo }), dateStatus);
+                createScheduleCard(Object.entries({ match_date, glogo, gname, guest_logo, guest_score, host_score, hname, hlogo }), dateStatus);
             }
             // const objArray = Object.entries({ match_date, glogo, gname, guest_logo, guest_score, host_score, hname, hlogo, vid_list });
-            //createCard(objArray, dateStatus);
+            //createScheduleCard(objArray, dateStatus);
         });
     }
 }
 
-function createCard(dataList, dateStatus) {
+function createScheduleCard(dataList, dateStatus) {
+
+    const schDiv = document.getElementsByClassName('scheduleDiv')[0];
     //const {match_date, glogo, gname, guest_logo, guest_score, host_score, hname, hlogo, vid_list} = data;
     //const objArray = Object.entries({match_date, glogo, gname, guest_logo, guest_score, host_score, hname, hlogo, vid_list});
     let divName = '';
@@ -188,8 +231,9 @@ function createCard(dataList, dateStatus) {
                 elDiv.appendChild(img);
                 break;
             case "match_date":
+                let zhDate = new Date(value.replace(' ', 'T') + '+08:00');
                 elDiv.setAttribute("class", "matchDate");
-                elDiv.textContent = value;
+                elDiv.textContent = zhDate.toLocaleString();
                 break;
             case "gname":
             case "hname":
@@ -227,29 +271,58 @@ function createCard(dataList, dateStatus) {
 }
 
 
-async function fetchData(endopoint, requestType, data) {
-    let apiBase = 'https://cdm-worker.sureshach-off.workers.dev/web/codm';
-    let response = '';
-    let requestUrl = apiBase + endopoint;
+//async function fetchData(endpoint, requestType, data) {
+//    let apiBase = 'https://cdm-worker.sureshach-off.workers.dev/web/codm';
+//    let response;
+//    let requestUrl = apiBase + endpoint;
 
-    if (requestType === "GET") {
-        try {
-            response = await fetch(requestUrl);
-        } catch (error) {
-            console.error(error);
+//    if (requestType === "GET") {
+//        try {
+//            response = await fetch(requestUrl);
+//        } catch (error) {
+//            console.error(error);
+//        }
+//    } else if (requestType === "POST") {
+//
+//    console.log(JSON.stringify(data), endpoint,requestType);
+//        try {
+//            response = await fetch(requestUrl, {
+//                method: "POST",
+//                headers: {
+ //       "Content-Type": "application/json"
+  //  },
+//                data: JSON.stringify(data),
+//            });
+//        } catch (error) {
+//            console.error(error);
+//        }
+//    }
+//    let jsonData = await response.json();
+//    return jsonData;
+//}
+async function fetchData(endpoint, method = "GET", data = null) {
+
+    const apiBase = 'https://cdm-worker.sureshach-off.workers.dev/web/codm';
+    const url = apiBase + endpoint;
+
+    const options = {
+        method: method,
+        headers: {
+            "Content-Type": "application/json"
         }
-    } else if (requestType === "POST") {
-        try {
-            response = await fetch(requestUrl, {
-                method: "POST",
-                data: JSON.stringify(data),
-            });
-        } catch (error) {
-            console.error(error);
-        }
+    };
+
+    if (data) {
+        options.body = JSON.stringify(data);
     }
-    let jsonData = await response.json();
-    return jsonData;
+
+    const response = await fetch(url, options);
+
+    if (!response.ok) {
+        throw new Error(`HTTP error ${response.status}`);
+    }
+
+    return await response.json();
 }
 
 
@@ -331,5 +404,118 @@ function attachDatalistMapping(inputId, hiddenId) {
   });
 }
 
+async function getPlayerData(playerid, seasonid, gamemode) {
+    const endpoint = '/getPlayerRanking';
+    const data = {seasonid: seasonid,
+    game_mode: gamemode};
+    console.log("i'm here",playerid, seasonid,gamemode);
+    console.log(data);
+    const playerJson = await fetchData(endpoint, "POST", data);
+    const {data: {rank}} = playerJson;
+    let player;
+    
+    for (const option of rank) {
+        if (option.player_id === playerid){
+            player = option;
+            break;
+        }
+    }
+    let playerRank = rank.indexOf(player);
+    createPlayerCard(data, gamemode, playerRank);
 
+}
+
+// Create Player Card
+function createPlayerCard(data, gamemode, rank) {
+    let cardDiv = document.createElement("div");
+    cardDiv.setAttribute('class', 'playerCard');
+    cardDiv.innerHTML =` <div class="playerInfo">
+            <div class="playerImage">
+              <img
+                src="${data.player_logo}"
+                alt=""
+              />
+            </div>
+
+            <h2>${data.player_name}</h2>
+          </div>
+          <div class="playerDetails">
+            <div class="playerMain">
+              <div id="rating">Rating: ${data.rating}</div>
+              <div id="rank">Rank: ${rank}</div>
+              <div id="mvp">MPV: ${data.mvp}</div>
+              <div id="teamInfo">
+                <img
+                  src="${data.team_logo}"
+                  alt=""
+                />
+                <p>${data.team_name}</p>
+              </div>
+            </div>
+            <div class="playerStats">
+              
+            </div>
+          </div>
+    `;
+    let statsDiv = cardDiv.querySelector('.playerStats');
+    switch (gamemode){
+        case "Hotspot":
+            statsDiv.innerHTML = `
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+`;
+        break;
+        case "Control":
+            statsDiv.innerHTML = `
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+`;
+
+        break;
+        case "Blast":
+            statsDiv.innerHTML = `
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+`;
+
+        break;
+        case "FULL":
+            statsDiv.innerHTML = `
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+`;
+
+        break;
+    }
+
+
+}
+
+//getPlayerData('908709411', 'CODML2025S1', 'FULL');
 //renderFront(currentSeason);
+//
+//getSchedule('CODML2025S2');

@@ -33,10 +33,46 @@ label {
     font-size: 18pt;
 }
 
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #735eeb,#d972ff);
+  }
+
+  .logo {
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  .search-box {
+    display: flex;
+    align-items: center;
+  }
+
+  .search-box button {
+    padding: 6px 12px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+  }
+
+  .search-box button:hover {
+    background-color: #45a049;
+  }
+
 .formContainer {
-    background-color: var(--cards);
+    background: linear-gradient(145deg, #474449, #2d232e) ;
     border-radius: 10px;
     color: var(--base-bg);
+    margin: 1rem;
+    display: none;
 }
 
 #normalArea {
@@ -291,6 +327,90 @@ label {
     width: 100%;
     text-align: center;
 }
+
+
+/*Card Styling Player & Team*/
+.playerCard {
+    min-width: 90%;
+    border: 1px solid goldenrod;
+    padding: 1rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    background: linear-gradient(145deg, #474449, #2d232e) ;
+    min-height: 30dvh;
+}
+
+.playerInfo {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+.playerInfo h2 {
+    color: gold;
+    font-size: 18pt;
+} 
+
+.playerImage {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid coral;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.playerImage img {
+    height: 100%;
+}
+
+.playerDetails {
+    margin-left: 5rem;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+
+
+}
+
+.playerMain {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 1rem;
+}
+.playerDetails{
+    #rating, #rank, #mvp, #teamInfo {
+        display: flex;
+        align-items: center;
+        background-color: goldenrod;
+        height: 30px;
+        padding: 2px 6px;
+        border-radius: 18px;
+        margin: 1rem 1rem;
+    }
+
+        #teamInfo {
+        background-color: skyblue;
+
+        >p {
+            color: black;
+        }
+    }
+    img {
+        width: 25px;
+    }
+}
+
+.playerStats {
+    min-height: 90%;
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 2.25rem;
+    margin-left: 2rem;
+}
+
+
 
 /* The Overlay (background) */
 .video-modal-overlay {

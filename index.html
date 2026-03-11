@@ -8,6 +8,13 @@
   </head>
 
   <body>
+    <nav class="navbar">
+      <div><a href="/" class="logo">CDMStats</a></div>
+
+      <div class="search-box">
+        <button onclick="showForm()">Search</button>
+      </div>
+    </nav>
     <main>
       <div id="videoModal" class="video-modal-overlay">
         <div class="video-modal-content">
@@ -25,87 +32,124 @@
           </div>
         </div>
       </div>
-      <div class="container">
-        <div class="formContainer">
-          <form id="searchForm" onsubmit="handleForm()">
-            <div id="normalArea">
-              <div id="selectBoxes">
-                <div id="formElements">
-                  <label for="dataType">Data Type</label>
-                  <select name="datatype" id="dataType">
-                    <option value="schedule">Schedule</option>
-                    <option value="searchPlayer">Player</option>
-                    <option value="napData">Map Data</option>
-                    <option value="temData">Team Data</option>
-                  </select>
+      <div class="formContainer">
+        <form id="searchForm">
+          <div id="normalArea">
+            <div id="selectBoxes">
+              <div id="formElements">
+                <label for="dataType">Data Type</label>
+                <select name="datatype" id="dataType">
+                  <option value="schedule">Schedule</option>
+                  <option value="searchPlayer">Player</option>
+                  <option value="mapData">Map Data</option>
+                  <option value="teamData">Team Data</option>
+                </select>
+              </div>
+              <div id="formElements">
+                <label for="season">Season</label>
+                <select name="season" id="season">
+                  <option value="CODML2026S1">current</option>
+                  <option value="CODML2025S2">2025 S2</option>
+                  <option value="CODML2025S1">2025 S1</option>
+                  <option value="CODML2024S2">2024 S2</option>
+                  <option value="CODML2024S1">2024 S1</option>
+                </select>
+              </div>
+            </div>
+            <fieldset>
+              <legend>Which Game Mode?</legend>
+              <div id="radioBoxes">
+                <div>
+                  <input
+                    type="radio"
+                    id="fullRadio"
+                    name="gameModes"
+                    value="FULL"
+                    checked
+                  />
+                  <label for="fullRadio">Full</label>
                 </div>
-                <div id="formElements">
-                  <label for="season">Season</label>
-                  <select name="season" id="season">
-                    <option value="CODML2025S2">current</option>
-                    <option value="CODML2025S1">2025 S1</option>
-                    <option value="CODML2024S2">2024 S2</option>
-                    <option value="CODML2024S1">2024 S1</option>
-                  </select>
+
+                <div>
+                  <input
+                    type="radio"
+                    id="hpRadio"
+                    name="gameModes"
+                    value="Hotspot"
+                  />
+                  <label for="hpRadio">Hardpoint</label>
+                </div>
+
+                <div>
+                  <input
+                    type="radio"
+                    id="sndRadio"
+                    name="gameModes"
+                    value="Blast"
+                  />
+                  <label for="sndRadio">S&D</label>
+                </div>
+                <div>
+                  <input
+                    type="radio"
+                    id="ctlRadio"
+                    name="gameModes"
+                    value="Control"
+                  />
+                  <label for="ctlRadio">Control</label>
                 </div>
               </div>
-              <fieldset>
-                <legend>Which Game Mode?</legend>
-                <div id="radioBoxes">
-                  <div>
-                    <input
-                      type="radio"
-                      id="fullRadio"
-                      name="gameModes"
-                      value="FULL"
-                      checked
-                    />
-                    <label for="fullRadio">Full</label>
-                  </div>
-
-                  <div>
-                    <input
-                      type="radio"
-                      id="hpRadio"
-                      name="gameModes"
-                      value="Hotspot"
-                    />
-                    <label for="hpRadio">Hardpoint</label>
-                  </div>
-
-                  <div>
-                    <input
-                      type="radio"
-                      id="sndRadio"
-                      name="gameModes"
-                      value="Blast"
-                    />
-                    <label for="sndRadio">S&D</label>
-                  </div>
-                  <div>
-                    <input
-                      type="radio"
-                      id="ctlRadio"
-                      name="gameModes"
-                      value="Control"
-                    />
-                    <label for="ctlRadio">Control</label>
-                  </div>
-                </div>
-              </fieldset>
-            </div>
-            <div id="searchArea">
-              <!-- <input type="text" id="_playerInput" list="_playerList" placeholder="Search Player..." />
+            </fieldset>
+          </div>
+          <div id="searchArea">
+            <!-- <input type="text" id="_playerInput" list="_playerList" placeholder="Search Player..." />
 
 <input type="hidden" id="_playerId" /> -->
-            </div>
-            <div id="submitDiv">
-              <input type="submit" id="submitBtn" />
-            </div>
-          </form>
-        </div>
+          </div>
+          <div id="submitDiv">
+            <input type="submit" id="submitBtn" />
+          </div>
+        </form>
+      </div>
+      <div class="container">
         <div class="scheduleRadio"></div>
         <div class="scheduleDiv"></div>
+        <div class="playerCard">
+          <div class="playerInfo">
+            <div class="playerImage">
+              <img
+                src="https://codm.tmes.qq.com/cdn/1741708800000/9ec7675a6517f110827df1a644766f52.png"
+                alt=""
+              />
+            </div>
+
+            <h2>Anzai</h2>
+          </div>
+          <div class="playerDetails">
+            <div class="playerMain">
+              <div id="rating">Rating: 1.23</div>
+              <div id="rank">Rank: 1</div>
+              <div id="mvp">MPV: 27</div>
+              <div id="teamInfo">
+                <img
+                  src="https://codmtv-pic.tga.qq.com/2ad34bebf6c0a39126b5fbd904d6c57b.png"
+                  alt=""
+                />
+                <p>Wolves</p>
+              </div>
+            </div>
+            <div class="playerStats">
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+              <div class="statField">STAT</div>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
     <script src="main.js"></script>
